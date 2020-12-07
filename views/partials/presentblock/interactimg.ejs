@@ -1,0 +1,29 @@
+<script>
+	var JSBlock = <%- JSON.stringify(block)%>;
+	var current = JSBlock["initial"];
+
+	function changePicture(clickNum){
+		temp = JSBlock[current]["child"][clickNum];
+		current = temp;
+
+		document.getElementById("displayImage").src = JSBlock[current]["path"];
+
+		buttonSection = document.getElementById("displaybutton");
+		buttonSection.innerHTML = "";
+
+		for (let i = 0; i < JSBlock[current]["child"].length; i++){
+			var btn = document.createElement("BUTTON");
+			btn.innerHTML = JSBlock[current]["choiceText"][i];
+			btn.setAttribute("onclick", "changePicture(" + i.toString() + ")");
+			buttonSection.appendChild(btn);
+		}
+	}
+</script>
+
+<img id="displayImage" src= <%= block[block["initial"]]["path"]%>>
+
+<section id="displaybutton">
+<% for (let i = 0; i < block[block["initial"]]["child"].length; i++){ %>
+	<button onclick ="changePicture(<%=i%>)"><%=block[block["initial"]]["choiceText"][i]%></button>
+<% } %>
+</section>

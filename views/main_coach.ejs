@@ -1,0 +1,52 @@
+<html lang="en">
+    <head> 
+    	<meta charset = "UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="Vitrual Mixed Coach">
+    	<meta name="author" content="Tianyuan Chen">
+        <link rel="stylesheet" href="/css/main.css">
+    	<title>Virtual Mixed Coach | Coach</title>
+    </head>
+
+    <body>
+
+        <script>
+        </script>
+    	<!-- nav -->
+    	<%- include('./partials/mainnav.ejs') %>
+
+    	<p> Front Page of Coach Side </p> 
+        <!-- Create Mode. A section which creates a new file with description and something and refresh. -->
+
+        <form action="/coach" method="POST">
+            <input type = "hidden" name="type" value="Add Class">
+            <p>Class Name</p>
+            <input name="name" type="text" required>
+            <p>Class Description</p>
+            <input name="description" type="text" required>
+            <p>Tutor</p>
+            <input name="tutor" type="text" required>
+            <p>File Name</p>
+            <input name="fileName" type="text" required>
+            <button type="submit">Create New Class</button>
+        </form>
+
+        <div class = "classListCoach">
+
+            <h2> All Classes </h2>
+
+            <% for (let i = 1; i < keys.length; i++){ %>
+            <form action="/coach" method="POST">
+                <input type="hidden" name="type" value="Delete Class">
+                <input type="hidden" name="fileName" value=<%= keys[i]%> >
+                <%- include('./partials/coachClassList.ejs', {contents:contents,keys:keys,i:i})%>
+                <button type="submit">Delete Class</button>
+            </form>
+            <% } %>
+
+        </div>
+
+		<!-- Footer -->
+ 		<%- include('./partials/footer.ejs') %>
+    </body>
+</html>

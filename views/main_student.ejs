@@ -1,0 +1,30 @@
+<html lang="en">
+    <head> 
+    	<meta charset = "UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="Vitrual Mixed Coach">
+    	<meta name="author" content="Tianyuan Chen">
+        <link rel="stylesheet" href="./css/main.css">
+    	<title>Virtual Mixed Coach | Student</title>
+    </head>
+
+    <body>
+    	<!-- nav -->
+    	<%- include('./partials/mainnav.ejs') %>
+
+    	<p> Front Page of Student Side </p>
+
+        <div class = "classListStudent">
+
+            <h2> All Classes </h2>
+
+            <% for (let i = 1; i < keys.length; i++){ %>
+                <%- include('./partials/studentClassList.ejs', {contents:contents,keys:keys,i:i}); %>
+            <% } %>
+
+        </div>
+
+		<!-- Footer -->
+ 		<%- include('./partials/footer.ejs') %>
+    </body>
+</html>

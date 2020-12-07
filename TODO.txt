@@ -1,0 +1,44 @@
+TODO:
+JSON Course File Format:
+
+Course Name: New Course
+Course Tutor: TC 2020
+Course Folder: (Assets + Course Name)
+Course ID: 001
+Course Length and Arrangement: [Text, Picture, Video, Text, Text]
+//Block Type on Block position
+
+Content:
+position: { Content1 }
+position: { Content2 }
+
+TODO:
+
+A total json file managing everything.
+Generate and Delete Manage Course ID & Name.
+
+TODO:
+
+CSS file name style with TEXT BLOCK in front.
+seperate CSS file? or for each block.
+
+TODO:
+
+Multiple Threading. (Later on going)
+
+TODO:
+Click on some button and add a section.
+(A section can be templated)
+Template Block has specific template ID. specific CSS file.
+Same ID with student side.
+
+TODO:
+Student side a section.
+Template Block has specific template ID. specific CSS file.
+Read and enter the content using ejs. with specific data.
+
+TODO:
+Save Button to save the current into a json file 
+choice to change or create new.
+
+

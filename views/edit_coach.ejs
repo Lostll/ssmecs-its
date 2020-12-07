@@ -1,0 +1,168 @@
+<html lang="en">
+    <head> 
+    	<meta charset = "UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="Vitrual Mixed Coach">
+    	<meta name="author" content="Tianyuan Chen">
+        <link rel="stylesheet" href="/css/coach.css">
+    	<title>Virtual Mixed Coach | Edit</title>
+    </head>
+
+        <script>
+            courseContent = <%- JSON.stringify(data)%>;
+
+            function delBlock(blockNum){
+                courseContent["queue"].splice(blockNum, 1);
+                for (let i = 0; i < courseContent["queue"].length; i++){
+                    if (i >= blockNum){
+                        courseContent[i.toString()] = courseContent[(i+1).toString()];
+                    }
+                }
+                delete courseContent[(courseContent["queue"].length).toString()];
+                document.getElementById(blockNum.toString()).remove();
+            }
+
+            function addBlock(blockType){
+                blockLen = courseContent["queue"].length.toString();
+                courseContent[blockLen] = {};
+                blockStart = "<section id ='" + blockLen.toString() + "'>";
+                blockEnd = "</section>";
+                switch (blockType) {
+                    case "text":
+                        blockText = '<%- include('./partials/editblock/text.ejs', {block:"new"}) %>';
+                        courseContent[blockLen]["title"] = "";
+                        courseContent[blockLen]["content"] = "";
+                        break;
+                    case "image":
+                        blockText = '<%- include('./partials/editblock/image.ejs', {block:"new"}) %>';
+                        courseContent[blockLen]["path"] = "";
+                        break;
+                    case "video":
+                        blockText = '<%- include('./partials/editblock/video.ejs', {block:"new"}) %>';
+                        courseContent[blockLen]["path"] = "";
+                        courseContent[blockLen]["type"] = "";
+                        break;
+                    case "interactimg":
+                        blockText = '<%- include('./partials/editblock/interactimg.ejs', {block:"new"}) %>';
+                        courseContent[blockLen]["initial"] = "";
+                        break;
+                    default:
+                        blockText = '<%- include('./partials/editblock/text.ejs', {block:"new"}) %>';
+                        courseContent[blockLen]["title"] = "";
+                        courseContent[blockLen]["content"] = "";
+                    }
+                totBlock = blockStart + blockText + blockEnd;
+                document.getElementById("coachCourseBlocks").insertAdjacentHTML("beforeend", totBlock);
+                courseContent["queue"].push(blockType);
+            }
+
+            function moveUpBlock(blockNum){
+                if (blockNum != 0){
+                    blockType = courseContent["queue"][blockNum];
+                    courseContent["queue"].splice(blockNum, 1);
+                    courseContent["queue"].splice(blockNum - 1, 0, blockType);
+                    temp = courseContent[blockNum.toString()];
+                    courseContent[blockNum.toString()] = courseContent[(blockNum - 1).toString()];
+                    courseContent[(blockNum - 1).toString()] = temp;
+
+                    switchElement = document.getElementById(blockNum.toString());
+                    topElement = document.getElementById((blockNum-1).toString());
+                    topElement.setAttribute("id",blockNum.toString());
+                    switchElement.setAttribute("id",(blockNum-1).toString());
+                    document.getElementById("coachCourseBlocks").insertBefore(switchElement, topElement);
+                }
+            }
+
+            function moveDownBlock(blockNum){
+                if (blockNum != courseContent["queue"].length - 1){
+                    blockType = courseContent["queue"][blockNum];
+                    courseContent["queue"].splice(blockNum, 1);
+                    courseContent["queue"].splice(blockNum + 1, 0, blockType);
+                    temp = courseContent[blockNum.toString()];
+                    courseContent[blockNum.toString()] = courseContent[(blockNum + 1).toString()];
+                    courseContent[(blockNum + 1).toString()] = temp;
+
+                    switchElement = document.getElementById(blockNum.toString());
+                    lowElement = document.getElementById((blockNum+1).toString());
+                    lowElement.setAttribute("id",blockNum.toString());
+                    switchElement.setAttribute("id",(blockNum+1).toString());
+                    (document.getElementById("coachCourseBlocks")).insertBefore(lowElement, switchElement);
+                }
+            }
+
+            function saveText(section){}
+            function saveImage(section){}
+            function saveVideo(section){}
+            function saveInteractiveImg(section){}
+
+            //call back function
+            function save(){
+                for (let i = 0; i < courseContent["queue"].length; i++){
+                    currSection = document.getElementById(i.toString());
+                    switch (courseContent["queue"][i]){
+                        case "text":
+                            saveText(currSection);
+                            break;
+                        case "image":
+                            saveImage(currSection);
+                            break;
+                        case "video":
+                            saveVideo(currSection);
+                            break;
+                        case "interactimg":
+                            saveInteractiveImg(currSection);
+                            break;
+                        default:
+                            saveText(currSection);
+                            break;
+                    }
+                }
+                // read all contents from sections and add to the 
+            }
+        </script>
+
+    <body> 
+    	<p> This is end page for student </p> 
+
+        <button onclick="addBlock('text')" value="text_btn_was_clicked">text</button>
+        <button onclick="addBlock('image')" value="text_btn_was_clicked">image</button>
+        <button onclick="addBlock('video')" value="text_btn_was_clicked">video</button>
+        <button onclick="addBlock('interactimg')" value="text_btn_was_clicked">interactimg</button>
+
+        <script type="text/javascript" src="/lib/coachEdit.js"> </script>
+
+        <section id="coachCourseBlocks">
+            <% for (let i = 0; i < data["queue"].length; i++){ %>
+                <section id= <%=i.toString()%> >
+            <%   switch (data["queue"][i]) {
+                    case "text": %>
+                    <%-    include('./partials/editblock/text.ejs', {block:data[i.toString()]}); %>
+                    <%     break;
+                    case "image": %>
+                    <%-    include('./partials/editblock/image.ejs', {block:data[i.toString()]["path"]}); %>
+                    <%     break;
+                    case "video": %>
+                    <%-    include('./partials/editblock/video.ejs', {block:data[i.toString()]}); %>
+                    <%     break;
+                    case "interactimg": %>
+                    <%-    include('./partials/editblock/interactimg.ejs', {block:data[i.toString()]}); %>
+                    <%     break;
+                    default: %>
+                    <%-    include('./partials/editblock/text.ejs', {block:data[i.toString()]}); %>
+                <% } %>
+                </section>
+            <% } %>
+        </section>
+
+        <button onclick="save()" value="text_btn_was_clicked">Save New</button>
+
+        <section>
+        <!-- Hidden from users -->
+            <form action="/coach/" + <%= parturl%> method="POST">
+                <input type="hidden" name="finalData" value="JSON.stringify(courseContent)">
+                <button type="submit" class="btn btn-warning btn-lg">Submit</button>
+            </form>
+        </section>
+
+    </body>
+</html>

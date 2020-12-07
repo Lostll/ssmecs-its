@@ -1,0 +1,39 @@
+<html lang="en">
+    <head> 
+    	<meta charset = "UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="Vitrual Mixed Coach">
+    	<meta name="author" content="Tianyuan Chen">
+        <link rel="stylesheet" href="/css/student.css">
+    	<title>Virtual Mixed Coach | Class</title>
+    </head>
+    <body> 
+    	<p> This is end page for student </p> 
+
+        <%- include('./partials/studentClassHead.ejs', {data:data}) %>
+
+        <div class = "classContentStudent">
+            <% for (let i = 0; i < data["queue"].length; i++){
+                switch (data["queue"][i]) {
+                    case "text": %>
+                    <%-    include('./partials/presentblock/text.ejs', {block:data[i.toString()]}); %>
+                    <%     break;
+                    case "image": %>
+                    <%-    include('./partials/presentblock/image.ejs', {block:data[i.toString()]["path"]}); %>
+                    <%     break;
+                    case "video": %>
+                    <%-    include('./partials/presentblock/video.ejs', {block:data[i.toString()]}); %>
+                    <%     break;
+                    case "interactimg": %>
+                    <%-    include('./partials/presentblock/interactimg.ejs', {block:data[i.toString()]}); %>
+                    <%     break;
+                    default: %>
+                    <%-    include('./partials/presentblock/text.ejs', {block:data[i.toString()]}); %>
+                <% }
+            } %>
+        </div>
+
+        <script type="text/javascript" src="/lib/studentEdit.js" ></script>
+
+    </body>
+</html>
